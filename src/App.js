@@ -19,41 +19,43 @@ const App = () => {
     const loggedUserJSON = window.localStorage.getItem("loggedNoteappUser");
     if (!loggedUserJSON) return;
     handleLogin(JSON.parse(loggedUserJSON));
-  }, [])
+  }, []);
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>setBlogs(blogs));
+    blogService.getAll().then(blogs => setBlogs(blogs));
   }, []);
 
   const handleLogin = (user) => {
     setUser(user);
     blogService.setToken(user.token);
     window.localStorage.setItem("loggedNoteappUser", JSON.stringify(user));
-  }
+  };
 
   const handleLogout = () => {
     setUser(null);
     blogService.setToken(null);
     window.localStorage.removeItem("loggedNoteappUser");
-  }
+  };
 
   const handleNotification = (newMessage, isError = false) => {
     const f = isError ? setErrorMessage : setInfoMessage;
     f(newMessage);
     setTimeout(() => f(""), 3000);
-  }
+  };
 
   const handleCreateBlog = async blog => {
     try {
       const b = await blogService.create(blog);
-      setBlogs(blogs.concat([{ ...b, user }]));
+      console.log(b);
+      console.log(user);
+      setBlogs(blogs.concat([b]));
       handleNotification(`Blog added: '${b.title}' by ${b.author}`);
       blogFormRef.current.toggleVisibility();
     } catch (e) {
       console.error(e);
-      handleNotification(`Could not add blog`, true);
+      handleNotification("Could not add blog", true);
     }
-  }
+  };
 
   const handleLikeBlog = async blog => {
     try {
@@ -61,9 +63,9 @@ const App = () => {
       setBlogs(blogs.map(b => b.id === newBlog.id ? newBlog : b));
     } catch (e) {
       console.error(e);
-      handleNotification(`Could not like blog`, true);
+      handleNotification("Could not like blog", true);
     }
-  }
+  };
 
   const handleRemoveBlog = async blog => {
     const s = `${blog.title} by ${blog.author}`;
@@ -74,9 +76,9 @@ const App = () => {
       handleNotification(`Blog removed: ${s} by ${blog.author}`);
     } catch (e) {
       console.error(e);
-      handleNotification(`Could not remove blog`, true);
+      handleNotification("Could not remove blog", true);
     }
-  }
+  };
 
   return (
     <div>
@@ -104,6 +106,6 @@ const App = () => {
       }
     </div>
   );
-}
+};
 
 export default App;

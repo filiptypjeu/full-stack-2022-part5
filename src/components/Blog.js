@@ -1,4 +1,5 @@
 import { useState } from "react";
+import PropTypes from "prop-types";
 
 const Blog = ({ blog, user, handleLike, handleRemove }) => {
   const [show, setShow] = useState(false);
@@ -15,18 +16,25 @@ const Blog = ({ blog, user, handleLike, handleRemove }) => {
     <div style={blogStyle}>
       <i>{blog.title}</i> <button onClick={() => setShow(!show)}>{show ? "hide" : "view"}</button>
       { show && <>
-            <br />by {blog.author}
-            <br />{blog.url}
-            <br />Likes: {blog.likes} <button onClick={() => handleLike(blog)}>like</button>
-            { user.username === blog.user.username &&
+        <br />by {blog.author}
+        <br />{blog.url}
+        <br />Likes: {blog.likes} <button onClick={() => handleLike(blog)}>like</button>
+        { (user.id === blog.user || user.id === blog.user.id) &&
               <>
                 <br /><button onClick={() => handleRemove(blog)}>remove</button>
               </>
-            }
-          </>
+        }
+      </>
       }
     </div>
   );
-}
+};
+
+Blog.propTypes = {
+  blog: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
+  handleLike: PropTypes.func.isRequired,
+  handleRemove: PropTypes.func.isRequired,
+};
 
 export default Blog;

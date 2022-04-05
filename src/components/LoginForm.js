@@ -1,5 +1,6 @@
 import { useState } from "react";
 import loginService from "../services/login";
+import PropTypes from "prop-types";
 
 const LoginForm = ({ handleNotification, handleLogin }) => {
 
@@ -19,7 +20,7 @@ const LoginForm = ({ handleNotification, handleLogin }) => {
     } catch (exception) {
       handleNotification("Wrong credentials", true);
     }
-  }
+  };
 
   return (
     <div>
@@ -28,7 +29,7 @@ const LoginForm = ({ handleNotification, handleLogin }) => {
       <form onSubmit={handleSubmit}>
         <div>
           username
-            <input
+          <input
             type="text"
             value={username}
             name="Username"
@@ -37,7 +38,7 @@ const LoginForm = ({ handleNotification, handleLogin }) => {
         </div>
         <div>
           password
-            <input
+          <input
             type="password"
             value={password}
             name="Password"
@@ -48,6 +49,11 @@ const LoginForm = ({ handleNotification, handleLogin }) => {
       </form>
     </div>
   );
-}
+};
+
+LoginForm.propTypes = {
+  handleNotification: PropTypes.func.isRequired,
+  handleLogin: PropTypes.func.isRequired,
+};
 
 export default LoginForm;
