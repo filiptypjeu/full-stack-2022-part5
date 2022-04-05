@@ -48,7 +48,7 @@ const App = () => {
       const b = await blogService.create(blog);
       console.log(b);
       console.log(user);
-      setBlogs(blogs.concat([b]));
+      setBlogs(blogs.concat([{ ...b, user }]));
       handleNotification(`Blog added: '${b.title}' by ${b.author}`);
       blogFormRef.current.toggleVisibility();
     } catch (e) {
