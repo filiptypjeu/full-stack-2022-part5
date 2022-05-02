@@ -21,16 +21,19 @@ const BlogForm = ({ handleCreateBlog }) => {
 
       <form onSubmit={handleSubmit} className="blogForm">
         <div>title: <input
+          id="title"
           value={title}
           onChange={({ target }) => setTitle(target.value)}
           placeholder="title"
         /></div>
         <div>author: <input
+          id="author"
           value={author}
           onChange={({ target }) => setAuthor(target.value)}
           placeholder="author"
         /></div>
         <div>url: <input
+          id="url"
           value={url}
           onChange={({ target }) => setUrl(target.value)}
           placeholder="url"

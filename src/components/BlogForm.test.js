@@ -4,12 +4,10 @@ import userEvent from "@testing-library/user-event";
 import BlogForm from "./BlogForm";
 
 describe("BlogForm", () => {
-  let form;
   const handleCreateBlog = jest.fn();
 
   beforeEach(() => {
-    const { container } = render(<BlogForm handleCreateBlog={handleCreateBlog} />);
-    form = container.querySelector(".blogForm");
+    render(<BlogForm handleCreateBlog={handleCreateBlog} />);
   });
 
   test("blog creation", () => {
