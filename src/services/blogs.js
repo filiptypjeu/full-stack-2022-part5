@@ -3,7 +3,7 @@ const baseUrl = "/api/blogs";
 
 let token = null;
 
-const setToken = newToken => token = `bearer ${newToken}`;
+const setToken = newToken => (token = `bearer ${newToken}`);
 
 const getAll = async () => {
   const response = await axios.get(baseUrl);
@@ -34,4 +34,4 @@ const remove = async blog => {
 };
 
 // eslint-disable-next-line
-export default { getAll, create, setToken, like, remove }
+export default { getAll, create, setToken, like, remove };

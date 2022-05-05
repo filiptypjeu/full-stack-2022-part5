@@ -5,11 +5,7 @@ const Error = ({ message }) => {
     return null;
   }
 
-  return (
-    <div className='message error'>
-      {message}
-    </div>
-  );
+  return <div className="message error">{message}</div>;
 };
 
 Error.propTypes = {

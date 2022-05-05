@@ -22,12 +22,7 @@ describe("Blog", () => {
       id: "user id",
     };
 
-    const { container } = render(<Blog
-      blog={blog}
-      user={user}
-      handleLike={handleLike}
-      handleRemove={() => {}}
-    />);
+    const { container } = render(<Blog blog={blog} user={user} handleLike={handleLike} handleRemove={() => {}} />);
     b = container.querySelector(".blog");
   });
 
@@ -62,4 +57,3 @@ describe("Blog", () => {
     expect(handleLike.mock.calls).toHaveLength(2);
   });
 });
-

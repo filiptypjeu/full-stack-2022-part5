@@ -25,7 +25,7 @@ const App = () => {
     blogService.getAll().then(blogs => setBlogs(blogs));
   }, []);
 
-  const handleLogin = (user) => {
+  const handleLogin = user => {
     setUser(user);
     blogService.setToken(user.token);
     window.localStorage.setItem("loggedNoteappUser", JSON.stringify(user));
@@ -60,7 +60,7 @@ const App = () => {
   const handleLikeBlog = async blog => {
     try {
       const newBlog = await blogService.like(blog);
-      setBlogs(blogs.map(b => b.id === newBlog.id ? newBlog : b));
+      setBlogs(blogs.map(b => (b.id === newBlog.id ? newBlog : b)));
     } catch (e) {
       console.error(e);
       handleNotification("Could not like blog", true);
@@ -84,26 +84,25 @@ const App = () => {
     <div>
       <Notification message={infoMessage} />
       <Error message={errorMessage} />
-      { !user
-        ? <LoginForm handleNotification={handleNotification} handleLogin={handleLogin} />
-        : <>
+      {!user ? (
+        <LoginForm handleNotification={handleNotification} handleLogin={handleLogin} />
+      ) : (
+        <>
           <p>
             {user.name || user.username} logged in
-            <button onClick={handleLogout} >logout</button>
+            <button onClick={handleLogout}>logout</button>
           </p>
           <Togglable buttonLabel="new blog" ref={blogFormRef}>
             <BlogForm handleCreateBlog={handleCreateBlog} />
           </Togglable>
           <h2>Blogs</h2>
-          {blogs.sort((a, b) => b.likes - a.likes).map(blog => <Blog
-            key={blog.id}
-            blog={blog}
-            user={user}
-            handleLike={handleLikeBlog}
-            handleRemove={handleRemoveBlog}
-          />)}
+          {blogs
+            .sort((a, b) => b.likes - a.likes)
+            .map(blog => (
+              <Blog key={blog.id} blog={blog} user={user} handleLike={handleLikeBlog} handleRemove={handleRemoveBlog} />
+            ))}
         </>
-      }
+      )}
     </div>
   );
 };
