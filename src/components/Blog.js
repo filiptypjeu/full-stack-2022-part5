@@ -1,8 +1,10 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
 
-const Blog = ({ blog, user, handleLike, handleRemove }) => {
+const Blog = ({ blog, handleLike, handleRemove }) => {
   const [show, setShow] = useState(false);
+  const user = useSelector(state => state.user);
 
   const blogStyle = {
     paddingTop: 10,
@@ -41,7 +43,6 @@ const Blog = ({ blog, user, handleLike, handleRemove }) => {
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired,
   handleLike: PropTypes.func.isRequired,
   handleRemove: PropTypes.func.isRequired,
 };

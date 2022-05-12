@@ -10,11 +10,6 @@ const slice = createSlice({
   },
 });
 
-// export const initalizeBlogs = () => async dispatch => {
-//   const blogs = await blogService.getAll();
-//   dispatch(slice.actions.set(blogs));
-// };
-
 export const initializeUser = () => async dispatch => {
   const loggedUserJSON = window.localStorage.getItem("loggedNoteappUser");
   if (!loggedUserJSON) return;
@@ -38,15 +33,5 @@ export const logout = () => async dispatch => {
   loginService.setToken(null);
   window.localStorage.removeItem("loggedNoteappUser");
 };
-
-// export const removeBlog = blog => async dispatch => {
-//   const b = await blogService.remove(blog);
-//   dispatch(slice.actions.remove(blog));
-// };
-
-// export const likeBlog = blog => async dispatch => {
-//   const b = await blogService.like(blog);
-//   dispatch(slice.actions.update(b));
-// };
 
 export default slice.reducer;
