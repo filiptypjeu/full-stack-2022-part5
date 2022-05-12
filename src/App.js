@@ -1,69 +1,51 @@
 import { useState, useEffect, useRef } from "react";
 import Notification from "./components/Notification";
-import Error from "./components/Error";
-import blogService from "./services/blogs";
 import LoginForm from "./components/LoginForm";
 import BlogForm from "./components/BlogForm";
 import Togglable from "./components/Togglable";
 import Blog from "./components/Blog";
+import { setNotification } from "./reducers/notificationReducer";
+import { createBlog, initalizeBlogs, likeBlog, removeBlog } from "./reducers/blogReducer";
+import { useDispatch, useSelector } from "react-redux";
+import { initializeUser, logout } from "./reducers/userReducer";
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
-  const [user, setUser] = useState(null);
-  const [infoMessage, setInfoMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const dispatch = useDispatch();
+
+  const blogs = useSelector(state => state.blogs);
+  const user = useSelector(state => state.user);
 
   const blogFormRef = useRef();
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem("loggedNoteappUser");
-    if (!loggedUserJSON) return;
-    handleLogin(JSON.parse(loggedUserJSON));
-  }, []);
+    dispatch(initializeUser());
+  }, [dispatch]);
 
   useEffect(() => {
-    blogService.getAll().then(blogs => setBlogs(blogs));
-  }, []);
+    dispatch(initalizeBlogs());
+  }, [dispatch]);
 
-  const handleLogin = user => {
-    setUser(user);
-    blogService.setToken(user.token);
-    window.localStorage.setItem("loggedNoteappUser", JSON.stringify(user));
-  };
-
-  const handleLogout = () => {
-    setUser(null);
-    blogService.setToken(null);
-    window.localStorage.removeItem("loggedNoteappUser");
-  };
-
-  const handleNotification = (newMessage, isError = false) => {
-    const f = isError ? setErrorMessage : setInfoMessage;
-    f(newMessage);
-    setTimeout(() => f(""), 3000);
+  const showNotification = message => dispatch(setNotification(message, 3, false));
+  const showError = (message, error) => {
+    if (error) console.error(error);
+    dispatch(setNotification(message, 3, true));
   };
 
   const handleCreateBlog = async blog => {
     try {
-      const b = await blogService.create(blog);
-      console.log(b);
-      console.log(user);
-      setBlogs(blogs.concat([{ ...b, user }]));
-      handleNotification(`Blog added: '${b.title}' by ${b.author}`);
+      await dispatch(createBlog(blog));
+      showNotification(`Blog added: '${blog.title}' by ${blog.author}`);
       blogFormRef.current.toggleVisibility();
     } catch (e) {
-      console.error(e);
-      handleNotification("Could not add blog", true);
+      showError("Could not add blog", e);
     }
   };
 
   const handleLikeBlog = async blog => {
     try {
-      const newBlog = await blogService.like(blog);
-      setBlogs(blogs.map(b => (b.id === newBlog.id ? newBlog : b)));
+      await dispatch(likeBlog(blog));
     } catch (e) {
-      console.error(e);
-      handleNotification("Could not like blog", true);
+      showError("Could not like blog", e);
     }
   };
 
@@ -71,32 +53,29 @@ const App = () => {
     const s = `${blog.title} by ${blog.author}`;
     if (!window.confirm(`Removing blog ${s}`)) return;
     try {
-      await blogService.remove(blog);
-      setBlogs(blogs.filter(b => b.id !== blog.id));
-      handleNotification(`Blog removed: ${s} by ${blog.author}`);
+      await dispatch(removeBlog(blog));
+      showNotification(`Blog removed: ${s} by ${blog.author}`);
     } catch (e) {
-      console.error(e);
-      handleNotification("Could not remove blog", true);
+      showError("Could not remove blog", e);
     }
   };
 
   return (
     <div>
-      <Notification message={infoMessage} />
-      <Error message={errorMessage} />
+      <Notification />
       {!user ? (
-        <LoginForm handleNotification={handleNotification} handleLogin={handleLogin} />
+        <LoginForm />
       ) : (
         <>
           <p>
             {user.name || user.username} logged in
-            <button onClick={handleLogout}>logout</button>
+            <button onClick={() => dispatch(logout())}>logout</button>
           </p>
           <Togglable buttonLabel="new blog" ref={blogFormRef}>
             <BlogForm handleCreateBlog={handleCreateBlog} />
           </Togglable>
           <h2>Blogs</h2>
-          {blogs
+          {[...blogs]
             .sort((a, b) => b.likes - a.likes)
             .map(blog => (
               <Blog key={blog.id} blog={blog} user={user} handleLike={handleLikeBlog} handleRemove={handleRemoveBlog} />
