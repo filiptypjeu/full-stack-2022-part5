@@ -8,7 +8,7 @@ const slice = createSlice({
     set: (_, action) => action.payload,
     add: (state, action) => [...state, action.payload],
     remove: (state, action) => state.filter(b => b.id !== action.payload.id),
-    update: (state, action) => state.map(b => (b.id === action.payload.id ? action.payload : b)),
+    update: (state, action) => state.map(b => (b.id === action.payload.id ? { ...action.payload, user: b.user } : b)),
   },
 });
 

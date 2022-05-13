@@ -1,6 +1,7 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const Blog = ({ blog, handleLike, handleRemove }) => {
   const [show, setShow] = useState(false);
@@ -16,7 +17,7 @@ const Blog = ({ blog, handleLike, handleRemove }) => {
 
   return (
     <div style={blogStyle} className="blog">
-      <i>{blog.title}</i> by {blog.author} <button onClick={() => setShow(!show)}>{show ? "hide" : "view"}</button>
+      <Link to={`/blogs/${blog.id}`}><i>{blog.title}</i></Link> by {blog.author} <button onClick={() => setShow(!show)}>{show ? "hide" : "view"}</button>
       {show && (
         <>
           <br />
