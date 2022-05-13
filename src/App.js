@@ -39,11 +39,6 @@ const App = () => {
       ) : (
         <>
           <Menu />
-          <p>
-            {user.name || user.username} logged in
-            <button onClick={() => dispatch(logout())}>logout</button>
-          </p>
-
           <Routes>
             <Route path="/users/:id" element={<User users={users} />} />
             <Route path="/users" element={<Users users={users} />} />
