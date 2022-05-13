@@ -12,7 +12,6 @@ const Blogs = () => {
 
   const blogFormRef = useRef();
 
-  const showNotification = message => dispatch(setNotification(message, 3, false));
   const showError = (message, error) => {
     if (error) console.error(error);
     dispatch(setNotification(message, 3, true));
@@ -21,7 +20,7 @@ const Blogs = () => {
   const handleCreateBlog = async blog => {
     try {
       await dispatch(createBlog(blog));
-      showNotification(`Blog added: '${blog.title}' by ${blog.author}`);
+      dispatch(setNotification(`Blog added: '${blog.title}' by ${blog.author}`));
       blogFormRef.current.toggleVisibility();
     } catch (e) {
       showError("Could not add blog", e);
@@ -41,24 +40,29 @@ const Blogs = () => {
     if (!window.confirm(`Removing blog ${s}`)) return;
     try {
       await dispatch(removeBlog(blog));
-      showNotification(`Blog removed: ${s} by ${blog.author}`);
+      dispatch(setNotification(`Blog removed: ${s} by ${blog.author}`));
     } catch (e) {
       showError("Could not remove blog", e);
     }
   };
 
   return <>
-    <Togglable buttonLabel="new blog" ref={blogFormRef}>
-      <BlogForm handleCreateBlog={handleCreateBlog} />
-    </Togglable>
-    <h2>Blogs</h2>
-    {
-      [...blogs]
-        .sort((a, b) => b.likes - a.likes)
-        .map(blog => (
-          <Blog key={blog.id} blog={blog} handleLike={handleLikeBlog} handleRemove={handleRemoveBlog} />
-        ))
-    }
+    <div className="container">
+      <Togglable buttonLabel="new blog" ref={blogFormRef}>
+        <BlogForm handleCreateBlog={handleCreateBlog} />
+      </Togglable>
+    </div>
+
+    <div className="container">
+      <h2>Blogs</h2>
+      {
+        [...blogs]
+          .sort((a, b) => b.likes - a.likes)
+          .map(blog => (
+            <Blog key={blog.id} blog={blog} handleLike={handleLikeBlog} handleRemove={handleRemoveBlog} />
+          ))
+      }
+    </div>
   </>;
 };
 

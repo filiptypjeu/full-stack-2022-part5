@@ -2,6 +2,7 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { Button } from "react-bootstrap";
 
 const Blog = ({ blog, handleLike, handleRemove }) => {
   const [show, setShow] = useState(false);
@@ -16,14 +17,14 @@ const Blog = ({ blog, handleLike, handleRemove }) => {
   };
 
   return (
-    <div style={blogStyle} className="blog">
-      <Link to={`/blogs/${blog.id}`}><i>{blog.title}</i></Link> by {blog.author} <button onClick={() => setShow(!show)}>{show ? "hide" : "view"}</button>
+    <div style={blogStyle} className="blog container">
+      <Link to={`/blogs/${blog.id}`}><i>{blog.title}</i></Link> by {blog.author} <Button onClick={() => setShow(!show)} variant={show ? "outline-primary" : "primary"}>{show ? "hide" : "view"}</Button>
       {show && (
         <>
           <br />
           {blog.url}
           <br />
-          Likes: {blog.likes} <button onClick={() => handleLike(blog)}>like</button>
+          Likes: {blog.likes} <Button variant="success" onClick={() => handleLike(blog)}>like</Button>
           {blog.user.name && (
             <>
               <br />
@@ -33,7 +34,7 @@ const Blog = ({ blog, handleLike, handleRemove }) => {
           {(user.id === blog.user || user.id === blog.user.id) && (
             <>
               <br />
-              <button onClick={() => handleRemove(blog)}>remove</button>
+              <Button variant="danger" onClick={() => handleRemove(blog)}>remove</Button>
             </>
           )}
         </>

@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { login } from "../reducers/userReducer";
 import { useDispatch } from "react-redux";
-import { setNotification } from "../reducers/notificationReducer";
+import { setError } from "../reducers/notificationReducer";
+import { Button, Form } from "react-bootstrap";
 
 const LoginForm = () => {
   const dispatch = useDispatch();
@@ -17,7 +18,7 @@ const LoginForm = () => {
     try {
       await dispatch(login(username, password));
     } catch (e) {
-      dispatch(setNotification("Wrong credentials", 3, true));
+      dispatch(setError("Wrong credentials"));
     }
   };
 
@@ -25,19 +26,15 @@ const LoginForm = () => {
     <div>
       <h2>Log in to application</h2>
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          username
-          <input id="username" type="text" value={username} name="Username" onChange={({ target }) => setUsername(target.value)} />
-        </div>
-        <div>
-          password
-          <input id="password" type="password" value={password} name="Password" onChange={({ target }) => setPassword(target.value)} />
-        </div>
-        <button type="submit" id="login-button">
-          login
-        </button>
-      </form>
+      <Form onSubmit={handleSubmit}>
+        <Form.Group>
+          <Form.Label>username:</Form.Label>
+          <Form.Control id="username" type="text" value={username} onChange={({ target }) => setUsername(target.value)} />
+          <Form.Label>password:</Form.Label>
+          <Form.Control id="password" type="password" value={password} onChange={({ target }) => setPassword(target.value)} />
+          <Button variant="success" type="submit" id="login-button">login</Button>
+        </Form.Group>
+      </Form>
     </div>
   );
 };

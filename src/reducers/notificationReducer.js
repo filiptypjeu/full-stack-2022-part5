@@ -9,8 +9,13 @@ const slice = createSlice({
   }
 });
 
-export const setNotification = (message, timeout, isError) => async dispatch => {
-  dispatch(slice.actions.set({ message, isError }));
+export const setNotification = (message, timeout = 3) => async dispatch => {
+  dispatch(slice.actions.set({ message, isError: false }));
+  setTimeout(() => dispatch(slice.actions.remove(message)), 1000 * timeout);
+};
+
+export const setError = (message, timeout = 3) => async dispatch => {
+  dispatch(slice.actions.set({ message, isError: true }));
   setTimeout(() => dispatch(slice.actions.remove(message)), 1000 * timeout);
 };
 

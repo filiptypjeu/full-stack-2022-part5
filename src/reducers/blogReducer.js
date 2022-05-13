@@ -32,4 +32,9 @@ export const likeBlog = blog => async dispatch => {
   dispatch(slice.actions.update(b));
 };
 
+export const commentBlog = (blog, comment) => async dispatch => {
+  const b = await blogService.comment(blog, comment);
+  dispatch(slice.actions.update(b));
+};
+
 export default slice.reducer;

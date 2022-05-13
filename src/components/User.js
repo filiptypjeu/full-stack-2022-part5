@@ -1,16 +1,16 @@
+import { ListGroup, ListGroupItem } from "react-bootstrap";
 import { Link, useParams } from "react-router-dom";
 
 const User = ({ users }) => {
   const id = useParams().id;
   const user = users.find(u => u.id === id);
 
-  return !user ? null : <>
-    <h2>{user.name}</h2>
-    <h3>added blogs</h3>
-    <ul>
-      {user.blogs.map(b => <li key={b.id}><Link to={`/blogs/${b.id}`}>{b.title}</Link></li>)}
-    </ul>
-  </>;
+  return !user ? null : <div className="container">
+    <h2>Blogs by {user.name}</h2>
+    <ListGroup variant="flush">
+      {user.blogs.map(b => <ListGroupItem key={b.id}><Link to={`/blogs/${b.id}`}>{b.title}</Link></ListGroupItem>)}
+    </ListGroup>
+  </div>;
 };
 
 export default User;

@@ -24,5 +24,10 @@ const remove = async blog => {
   return response.data;
 };
 
+const comment = async (blog, comment) => {
+  const response = await axios.post(`${baseUrl}/${blog.id}/comments`, { comment });
+  return response.data;
+};
+
 // eslint-disable-next-line
-export default { getAll, create, like, remove };
+export default { getAll, create, like, remove, comment };

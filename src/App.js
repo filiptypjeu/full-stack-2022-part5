@@ -30,7 +30,7 @@ const App = () => {
     dispatch(initalizeBlogs());
   }, [dispatch]);
 
-  return (
+  return <div className="container">
     <Router>
       <Notification />
 
@@ -49,7 +49,7 @@ const App = () => {
         </>
       )}
     </Router>
-  );
+  </div>;
 };
 
 export default App;
